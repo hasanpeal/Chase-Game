@@ -5,6 +5,8 @@ int main() {
     struct sockaddr_in address;
     int opt = 1;
     int addrlen = sizeof(address);
+    char buffer[BUFFER_SIZE] = { 0 };
+    ChessGame game;
 
     // Create socket
     if ((listenfd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
@@ -46,8 +48,24 @@ int main() {
 
     INFO("Server accepted connection");
 
+    initialize_game(&game);
+    display_chessboard(&game);
+
     while (1) {
         // Fill this in
+        read(connfd, buffer, 1024 - 1);
+        if(receive_command(&game, buffer, connfd, false) == COMMAND_FORFEIT)
+            break;
+        INFO("Enter a valid command");
+        char str[200];
+        fgets(str, 200, stdin);
+        int result = send_command(&game, str, connfd, false);
+        while(result == COMMAND_ERROR){
+            INFO("You entered wrong command, please Enter a valid command");
+            result = send_command(&game, str, connfd, false);
+        }
+        if(result == COMMAND_FORFEIT)
+            break;
     }
 
     close(listenfd);

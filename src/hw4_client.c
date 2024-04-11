@@ -13,6 +13,7 @@ int main() {
     ChessGame game;
     int connfd = 0;
     struct sockaddr_in serv_addr;
+    char buffer[BUFFER_SIZE] = { 0 };
 
     // Connect to the server
     if ((connfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -37,6 +38,19 @@ int main() {
 
     while (1) {
         // Fill this in
+        INFO("Enter a valid command");
+        char str[200];
+        fgets(str, 200, stdin);
+        int result = send_command(&game, str, connfd, true);
+        while(result == COMMAND_ERROR){
+            INFO("You entered wrong command, please Enter a valid command");
+            result = send_command(&game, str, connfd, true);
+        }
+        if(result == COMMAND_FORFEIT)
+            break;
+        read(connfd, buffer, 1024 - 1);
+        if(receive_command(&game, buffer, connfd, true) == COMMAND_FORFEIT)
+            break;
     }
 
     // Please ensure that the following lines of code execute just before your program terminates.
