@@ -243,7 +243,7 @@ void fen_to_chessboard(const char *fen, ChessGame *game) {
                 game->chessboard[row][index] = token[i];
                 index++;
             }
-        token = strtok(NULL, "-");
+        token = strtok(NULL, "/");
         row++;
     }
 }
