@@ -274,47 +274,47 @@ int parse_move(const char *move, ChessMove *parsed_move) {
 
 int make_move(ChessGame *game, ChessMove *move, bool is_client, bool validate_move) {
     int src_row, src_col, dest_row, dest_col;
-    src_row = move->startSquare[0] - 'a' + 1;
-    src_col = move->startSquare[1] - '0';
-    dest_row = move->endSquare[0] - 'a' + 1;
-    dest_col = move->endSquare[1] - '0';
+    src_row = move->startSquare[0] - '0';
+    src_col = move->startSquare[1] - 'a';
+    dest_row = move->endSquare[0] - '0';
+    dest_col = move->endSquare[1] - 'a';
 
     if (validate_move) {
         if((game->currentPlayer == WHITE_PLAYER && !is_client) || (game->currentPlayer == BLACK_PLAYER && is_client))
             return MOVE_OUT_OF_TURN;
-        if(game->chessboard[8 - src_row][src_col - 1] == '.')
+        if(game->chessboard[8 - src_row][src_col] == '.')
             return MOVE_NOTHING;
-        if((is_client && islower(game->chessboard[8 - src_row][src_col - 1]) == 0)
-            || (!is_client && islower(game->chessboard[8 - src_row][src_col - 1]) != 0))
+        if((is_client && islower(game->chessboard[8 - src_row][src_col]) == 0)
+            || (!is_client && islower(game->chessboard[8 - src_row][src_col]) != 0))
             return MOVE_WRONG_COLOR;
-        if((islower(game->chessboard[8 - dest_row][dest_col - 1]) == 0 && islower(game->chessboard[8 - src_row][src_col - 1]) == 0)
-            || (islower(game->chessboard[8 - dest_row][dest_col - 1]) != 0 && islower(game->chessboard[8 - src_row][src_col - 1]) != 0))
+        if((islower(game->chessboard[8 - dest_row][dest_col]) == 0 && islower(game->chessboard[8 - src_row][src_col]) == 0)
+            || (islower(game->chessboard[8 - dest_row][dest_col]) != 0 && islower(game->chessboard[8 - src_row][src_col]) != 0))
             return MOVE_SUS;
-        if(strlen(move->endSquare) == (size_t)3 && game->chessboard[8 - src_row][src_col - 1] != 'p' && game->chessboard[8 - src_row][src_col - 1] != 'P')
+        if(strlen(move->endSquare) == (size_t)3 && game->chessboard[8 - src_row][src_col] != 'p' && game->chessboard[8 - src_row][src_col - 1] != 'P')
             return MOVE_NOT_A_PAWN;
-        if(strlen(move->endSquare) == (size_t)3 && ((game->chessboard[8 - src_row][src_col - 1] == 'p' && dest_row == 1) 
-            || (game->chessboard[8 - src_row][src_col - 1] == 'P' && dest_row == 8)))
+        if(strlen(move->endSquare) == (size_t)3 && ((game->chessboard[8 - src_row][src_col] == 'p' && dest_row == 1) 
+            || (game->chessboard[8 - src_row][src_col] == 'P' && dest_row == 8)))
             return MOVE_MISSING_PROMOTION;
-        if(!is_valid_move(game->chessboard[8 - src_row][src_col - 1], src_row, src_col, dest_row, dest_col, game))
+        if(!is_valid_move(game->chessboard[8 - src_row][src_col], src_row, src_col, dest_row, dest_col, game))
             return MOVE_WRONG;
     }
-    if(game->chessboard[8 - dest_row][dest_col - 1] != '.'){
-        if(game->chessboard[8 - dest_row][dest_col - 1] == 'p' || game->chessboard[8 - dest_row][dest_col - 1] == 'P'){
+    if(game->chessboard[8 - dest_row][dest_col] != '.'){
+        if(game->chessboard[8 - dest_row][dest_col] == 'p' || game->chessboard[8 - dest_row][dest_col] == 'P'){
             bool found = false;
             for(int i = 0; i < game->capturedCount; i++)
-                if(game->capturedPieces[i] == game->chessboard[8 - dest_row][dest_col - 1]){
+                if(game->capturedPieces[i] == game->chessboard[8 - dest_row][dest_col]){
                     found = true;
                     break;
                 }
             if(!found)
-                game->capturedPieces[game->capturedCount] = game->chessboard[8 - dest_row][dest_col - 1];
+                game->capturedPieces[game->capturedCount] = game->chessboard[8 - dest_row][dest_col];
         }
         game->capturedCount++;
     }
     game->moves[game->moveCount] = *move;
     game->moveCount++;
-    game->chessboard[dest_row][dest_col] = game->chessboard[src_row][src_col];
-    game->chessboard[src_row][src_col] = '.';
+    game->chessboard[8 - dest_row][dest_col] = game->chessboard[8 - src_row][src_col];
+    game->chessboard[8 - src_row][src_col] = '.';
     if(is_client)
         game->currentPlayer = BLACK_PLAYER;
     else
