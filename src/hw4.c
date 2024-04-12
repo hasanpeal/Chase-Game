@@ -53,6 +53,7 @@ void chessboard_to_fen(char fen[], ChessGame *game) {
             strcat(fen, " b");
         }
     }
+
 }
 
 bool is_valid_pawn_move(char piece, int src_row, int src_col, int dest_row, int dest_col, ChessGame *game) {
@@ -96,7 +97,6 @@ bool is_valid_pawn_move(char piece, int src_row, int src_col, int dest_row, int 
     }
     return true;
 }
-
 
 bool is_valid_rook_move(int src_row, int src_col, int dest_row, int dest_col, ChessGame *game) {
     if(dest_row - src_row != 0 && dest_col - src_col != 0)
@@ -157,12 +157,12 @@ bool is_valid_bishop_move(int src_row, int src_col, int dest_row, int dest_col, 
     }
     else{
         if(src_col < dest_col){
-            for(int i = 0; i < src_row; i++)
+            for(int i = 1; i + dest_row < src_row; i++)
                 if(game->chessboard[src_row - i][src_col + i] != '.')
                     return false;
         }
         else{
-            for(int i = 0; i < src_row; i++)
+            for(int i = 1; i + dest_row < src_row; i++)
                 if(game->chessboard[src_row - i][src_col - i] != '.')
                     return false;
         }
