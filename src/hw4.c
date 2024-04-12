@@ -274,10 +274,10 @@ int parse_move(const char *move, ChessMove *parsed_move) {
 
 int make_move(ChessGame *game, ChessMove *move, bool is_client, bool validate_move) {
     int src_row, src_col, dest_row, dest_col;
-    src_row = move->startSquare[0] - '0';
-    src_col = move->startSquare[1] - 'a' + 1;
-    dest_row = move->endSquare[0] - '0';
-    dest_col = move->endSquare[1] - 'a' + 1;
+    src_row = move->startSquare[0] - 'a' + 1;
+    src_col = move->startSquare[1] - '0';
+    dest_row = move->endSquare[0] - 'a' + 1;
+    dest_col = move->endSquare[1] - '0';
 
     if (validate_move) {
         if((game->currentPlayer == WHITE_PLAYER && !is_client) || (game->currentPlayer == BLACK_PLAYER && is_client))
