@@ -145,12 +145,12 @@ bool is_valid_bishop_move(int src_row, int src_col, int dest_row, int dest_col, 
         return false;
     if(src_row < dest_row){
         if(src_col < dest_col){
-            for(int i = 1; i < dest_row; i++)
+            for(int i = 1; src_row + i < dest_row; i++)
                 if(game->chessboard[src_row + i][src_col + i] != '.')
                     return false;
         }
         else{
-            for(int i = 1; i < dest_row; i++)
+            for(int i = 1; src_row + i < dest_row; i++)
                 if(game->chessboard[src_row + i][src_col - i] != '.')
                     return false;
         }
@@ -221,6 +221,8 @@ bool is_valid_move(char piece, int src_row, int src_col, int dest_row, int dest_
 void fen_to_chessboard(const char *fen, ChessGame *game) {
     char *str = strdup(fen);
     char *token = strtok(str, "/");
+
+    initialize_game(game);
    
     int row = 0;
     while (token != NULL)
