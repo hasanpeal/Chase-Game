@@ -56,7 +56,7 @@ void chessboard_to_fen(char fen[], ChessGame *game) {
 }
 
 bool is_valid_pawn_move(char piece, int src_row, int src_col, int dest_row, int dest_col, ChessGame *game) {
-    if(game->chessboard[8 - dest_row][dest_col - 1] != '.' && src_col == dest_col)
+    if(game->chessboard[dest_row][dest_col] != '.' && src_col == dest_col)
             return false;
     if(src_col != dest_col){
         if(src_col > dest_col){
@@ -67,9 +67,9 @@ bool is_valid_pawn_move(char piece, int src_row, int src_col, int dest_row, int 
             if(dest_col - src_col > 1)
                 return false;
         }
-        if(game->chessboard[8 - dest_row][dest_col - 1] == '.' 
-            || (islower(game->chessboard[8 - dest_row][dest_col - 1]) == 0 && islower(piece) == 0)
-            || (islower(game->chessboard[8 - dest_row][dest_col - 1]) != 0 && islower(piece) != 0))
+        if(game->chessboard[dest_row][dest_col] != '.' 
+            || (islower(game->chessboard[dest_row][dest_col]) == 0 && islower(piece) == 0)
+            || (islower(game->chessboard[dest_row][dest_col]) != 0 && islower(piece) != 0))
             return false;
     }
     if(islower(piece) != 0){
