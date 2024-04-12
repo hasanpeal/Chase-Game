@@ -255,7 +255,7 @@ int parse_move(const char *move, ChessMove *parsed_move) {
         return PARSE_MOVE_INVALID_FORMAT;
     if(!(isdigit(move[1]) && move[1] >= '1' && move[1] <= '8') || !(isdigit(move[3]) && move[3] >= '1' && move[3] <= '8'))
         return PARSE_MOVE_OUT_OF_BOUNDS;
-    if(strlen(move) == (size_t)5 && (move[3] != '8' || move[3] != '1'))
+    if(strlen(move) == (size_t)5 && move[3] != '8' && move[3] != '1')
         return PARSE_MOVE_INVALID_DESTINATION;
     if(strlen(move) == (size_t)5 && move[4] != 'q' && move[4] != 'b' && move[4] != 'r' && move[4] != 'n')
         return PARSE_MOVE_INVALID_PROMOTION;
