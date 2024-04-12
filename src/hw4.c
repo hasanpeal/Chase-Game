@@ -103,28 +103,30 @@ bool is_valid_rook_move(int src_row, int src_col, int dest_row, int dest_col, Ch
         return false;
     if(dest_row - src_row == 0){
         if(dest_col > src_col){
-            for(int i = src_col + 1; i <= dest_col; i++)
-                if(game->chessboard[8 - dest_row][i - 1] != '.')
+            for(int i = src_col + 1; i < dest_col; i++)
+                if(game->chessboard[dest_row][i] != '.')
                     return false;
         }
         else{
-            for(int i = src_col - 1; i >= dest_col; i--)
-                if(game->chessboard[8 - dest_row][i - 1] != '.')
+            for(int i = src_col - 1; i > dest_col; i--)
+                if(game->chessboard[dest_row][i] != '.')
                     return false;
         }
     }
     else{
         if(dest_row > src_row){
-            for(int i = src_row + 1; i <= dest_row; i++)
-                if(game->chessboard[8 - i][dest_col - 1] != '.' && dest_row != i)
+            for(int i = src_row + 1; i < dest_row; i++)
+                if(game->chessboard[i][dest_col] != '.')
                     return false;
         }
         else{
-            for(int i = src_row - 1; i >= dest_row; i--)
-                if(game->chessboard[8 - i][dest_col - 1] != '.' && dest_row != i)
+            for(int i = src_row - 1; i > dest_row; i--)
+                if(game->chessboard[i][dest_col] != '.')
                     return false;
         }
     }
+    if(game->chessboard[dest_row][dest_col] != '.' && game->chessboard[dest_row][dest_col] == game->chessboard[src_row][src_col])
+        return false;
 
     return true;
 }
@@ -143,28 +145,30 @@ bool is_valid_bishop_move(int src_row, int src_col, int dest_row, int dest_col, 
         return false;
     if(src_row < dest_row){
         if(src_col < dest_col){
-            for(int i = 1; i <= dest_row; i++)
-                if(game->chessboard[8 - src_row + i][src_col + i - 1] != '.')
+            for(int i = 1; i < dest_row; i++)
+                if(game->chessboard[src_row + i][src_col + i] != '.')
                     return false;
         }
         else{
-            for(int i = 1; i <= dest_row; i++)
-                if(game->chessboard[8 - src_row + i][src_col - i - 1] != '.')
+            for(int i = 1; i < dest_row; i++)
+                if(game->chessboard[src_row + i][src_col - i] != '.')
                     return false;
         }
     }
     else{
         if(src_col < dest_col){
             for(int i = 0; i < src_row; i++)
-                if(game->chessboard[8 - src_row - i][src_col + i - 1] != '.')
+                if(game->chessboard[src_row - i][src_col + i] != '.')
                     return false;
         }
         else{
             for(int i = 0; i < src_row; i++)
-                if(game->chessboard[8 - src_row - i][src_col - i - 1] != '.')
+                if(game->chessboard[src_row - i][src_col - i] != '.')
                     return false;
         }
     }
+    if(game->chessboard[dest_row][dest_col] != '.' && game->chessboard[dest_row][dest_col] == game->chessboard[src_row][src_col])
+        return false;
     return true;
 }
 
