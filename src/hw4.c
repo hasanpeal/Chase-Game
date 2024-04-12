@@ -82,7 +82,7 @@ bool is_valid_pawn_move(char piece, int src_row, int src_col, int dest_row, int 
         if(game->chessboard[dest_row][dest_col] != '.' )
             return false;
         if(dest_row - src_row  == 2)
-            if(game->chessboard[dest_row + 1][dest_col] != '.' )
+            if(game->chessboard[src_row + 1][dest_col] != '.' )
                 return false;
     }
     else{
@@ -95,7 +95,7 @@ bool is_valid_pawn_move(char piece, int src_row, int src_col, int dest_row, int 
         if(game->chessboard[dest_row][dest_col] != '.' )
             return false;
         if(src_row - dest_row  == 2)
-            if(game->chessboard[dest_row - 1][dest_col] != '.' )
+            if(game->chessboard[src_row - 1][dest_col] != '.' )
                 return false;
     }
     return true;
