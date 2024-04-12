@@ -73,19 +73,19 @@ bool is_valid_pawn_move(char piece, int src_row, int src_col, int dest_row, int 
             return false;
     }
     if(islower(piece) != 0){
-        if(src_row < dest_row)
+        if(src_row > dest_row)
             return false;
-        if(src_row != 7 && src_row - dest_row  != 1)
+        if(src_row != 1 && dest_row - src_row != 1)
             return false;
-        else if(src_row == 7 && src_row - dest_row  != 1 && src_row - dest_row  != 2)
+        else if(src_row == 1 && dest_row - src_row  != 1 && dest_row - src_row  != 2)
             return false;
     }
     else{
-        if(src_row > dest_row)
+        if(src_row < dest_row)
             return false;
-        if(src_row != 2 && dest_row - src_row  != 1)
+        if(src_row != 6 && src_row - dest_row  != 1)
             return false;
-        else if(src_row == 2 && dest_row - src_row  != 1 && dest_row - src_row  != 2)
+        else if(src_row == 6 && src_row - dest_row  != 1 && src_row - dest_row  != 2)
             return false;
     }
     return true;
