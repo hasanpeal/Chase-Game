@@ -282,10 +282,10 @@ int make_move(ChessGame *game, ChessMove *move, bool is_client, bool validate_mo
     if (validate_move) {
         if((game->currentPlayer == WHITE_PLAYER && !is_client) || (game->currentPlayer == BLACK_PLAYER && is_client))
             return MOVE_OUT_OF_TURN;
-        if(game->chessboard[8 - dest_row][dest_col - 1] == '.')
+        if(game->chessboard[8 - src_row][src_col - 1] == '.')
             return MOVE_NOTHING;
-        if((is_client && islower(game->chessboard[8 - dest_row][dest_col - 1]) == 0)
-            || (!is_client && islower(game->chessboard[8 - dest_row][dest_col - 1]) != 0))
+        if((is_client && islower(game->chessboard[8 - src_row][src_col - 1]) == 0)
+            || (!is_client && islower(game->chessboard[8 - src_row][src_col - 1]) != 0))
             return MOVE_WRONG_COLOR;
         if((islower(game->chessboard[8 - dest_row][dest_col - 1]) == 0 && islower(game->chessboard[8 - src_row][src_col - 1]) == 0)
             || (islower(game->chessboard[8 - dest_row][dest_col - 1]) != 0 && islower(game->chessboard[8 - src_row][src_col - 1]) != 0))
