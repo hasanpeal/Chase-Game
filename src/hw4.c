@@ -262,10 +262,12 @@ int parse_move(const char *move, ChessMove *parsed_move) {
 
     parsed_move->startSquare[0] = move[0];
     parsed_move->startSquare[1] = move[1];
+    parsed_move->startSquare[2] = 0;
     parsed_move->endSquare[0] = move[2];
     parsed_move->endSquare[1] = move[3];
     if(strlen(move) == (size_t)5)
         parsed_move->endSquare[2] = move[4];
+    parsed_move->endSquare[3] = 0;
 
     return 0;
 }
