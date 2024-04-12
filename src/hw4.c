@@ -69,6 +69,8 @@ bool is_valid_pawn_move(char piece, int src_row, int src_col, int dest_row, int 
         }
         if(game->chessboard[dest_row][dest_col] != '.' && game->chessboard[dest_row][dest_col] == game->chessboard[src_row][src_col])
             return false;
+        if(game->chessboard[dest_row][dest_col] == '.')
+            return false;
     }
     if(islower(piece) != 0){
         if(src_row > dest_row)
