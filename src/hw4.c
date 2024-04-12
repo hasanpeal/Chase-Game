@@ -24,6 +24,7 @@ void initialize_game(ChessGame *game) {
 }
 
 void chessboard_to_fen(char fen[], ChessGame *game) {
+    memset(fen, 0, strlen(fen) * sizeof(fen[0]));
     int spaces = 0;
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 8; j++)
@@ -52,7 +53,6 @@ void chessboard_to_fen(char fen[], ChessGame *game) {
             strcat(fen, " b");
         }
     }
-
 }
 
 bool is_valid_pawn_move(char piece, int src_row, int src_col, int dest_row, int dest_col, ChessGame *game) {
