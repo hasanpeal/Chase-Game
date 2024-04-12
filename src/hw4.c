@@ -95,6 +95,7 @@ bool is_valid_pawn_move(char piece, int src_row, int src_col, int dest_row, int 
     return true;
 }
 
+
 bool is_valid_rook_move(int src_row, int src_col, int dest_row, int dest_col, ChessGame *game) {
     if(dest_row - src_row != 0 && dest_col - src_col != 0)
         return false;
