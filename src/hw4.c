@@ -287,7 +287,7 @@ int make_move(ChessGame *game, ChessMove *move, bool is_client, bool validate_mo
         if((is_client && islower(game->chessboard[8 - src_row][src_col]) != 0)
             || (!is_client && islower(game->chessboard[8 - src_row][src_col]) == 0))
             return MOVE_WRONG_COLOR;
-        if((islower(game->chessboard[8 - dest_row][dest_col]) == 0 && islower(game->chessboard[8 - src_row][src_col]) == 0)
+        if((isupper(game->chessboard[8 - dest_row][dest_col]) != 0 && isupper(game->chessboard[8 - src_row][src_col]) != 0)
             || (islower(game->chessboard[8 - dest_row][dest_col]) != 0 && islower(game->chessboard[8 - src_row][src_col]) != 0))
             return MOVE_SUS;
         if(strlen(move->endSquare) == (size_t)3 && game->chessboard[8 - src_row][src_col] != 'p' && game->chessboard[8 - src_row][src_col - 1] != 'P')
