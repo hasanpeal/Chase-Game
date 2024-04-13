@@ -493,4 +493,3 @@ void display_chessboard(ChessGame *game) {
     }
     printf("  a b c d e f g h\n");
 }
-
