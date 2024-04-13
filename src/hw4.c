@@ -398,7 +398,6 @@ int receive_command(ChessGame *game, const char *message, int socketfd, bool is_
         ChessMove parsed_move;
         if(parse_move(token, &parsed_move) == 0){
             if(make_move(game, &parsed_move, is_client, false) == 0){
-                free(str);
                 return COMMAND_MOVE;
             }
             else
@@ -408,13 +407,11 @@ int receive_command(ChessGame *game, const char *message, int socketfd, bool is_
             return COMMAND_ERROR;
     }else if(strcmp(token, "/forfeit") == 0){
         close(socketfd);
-        free(str);
         return COMMAND_FORFEIT;
     }else if(strcmp(token, "/import") == 0){
-        if(is_client){
+        if(!is_client){
             token = strtok(NULL, " ");
             fen_to_chessboard(token, game);
-            free(str);
             return COMMAND_IMPORT;
         }
         else
@@ -427,13 +424,11 @@ int receive_command(ChessGame *game, const char *message, int socketfd, bool is_
         token = strtok(NULL, " ");
         save_number = atoi(token);
         if(load_game(game, userName, "game_database.txt", save_number) == 0){
-            free(str);
             return COMMAND_LOAD;
         }
         else
             return COMMAND_ERROR;
     }
-    free(str);
     return -1;
 }
 
