@@ -48,10 +48,12 @@ int main() {
             result = send_command(&game, str, connfd, true);
         }
         if(result == COMMAND_FORFEIT){
+            printf("++++++++++++++++++++++++++++++");
             break;
         }
         read(connfd, buffer, 1024 - 1);
         if(receive_command(&game, buffer, connfd, true) == COMMAND_FORFEIT){
+            printf("///////////////////////////////");
             break;
         }
     }
