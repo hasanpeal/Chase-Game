@@ -376,7 +376,11 @@ int send_command(ChessGame *game, const char *message, int socketfd, bool is_cli
         else
             return COMMAND_ERROR;
     }else if(strcmp(token, "/save") == 0){
-        if(save_game(game, "client's username", "game_database.txt") == 0){
+        char *userName;
+        //int save_number;
+        token = strtok(NULL, " ");
+        userName = token;
+        if(save_game(game, userName, "game_database.txt") == 0){
             send(socketfd, message, strlen(message), 0);
             return COMMAND_SAVE;
         }
