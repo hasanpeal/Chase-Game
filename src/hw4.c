@@ -409,7 +409,7 @@ int receive_command(ChessGame *game, const char *message, int socketfd, bool is_
         close(socketfd);
         return COMMAND_FORFEIT;
     }else if(strcmp(token, "/import") == 0){
-        if(!is_client){
+        if(is_client){
             token = strtok(NULL, " ");
             fen_to_chessboard(token, game);
             return COMMAND_IMPORT;
