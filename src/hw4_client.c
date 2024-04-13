@@ -46,8 +46,10 @@ int main() {
             INFO("You entered wrong command, please Enter a valid command");
             result = send_command(&game, str, connfd, true);
         }
-        if(result == COMMAND_FORFEIT)
-            break;
+        if(result == COMMAND_FORFEIT){
+            close(connfd);
+            exit(1); 
+        }
         read(connfd, buffer, 1024 - 1);
         if(receive_command(&game, buffer, connfd, true) == COMMAND_FORFEIT)
             break;

@@ -68,7 +68,8 @@ int main() {
         }
         if(result == COMMAND_FORFEIT){
             close(connfd);
-            break;
+            close(listenfd);
+            exit(1);
         }
     }
 
