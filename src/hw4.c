@@ -292,8 +292,8 @@ int make_move(ChessGame *game, ChessMove *move, bool is_client, bool validate_mo
             return MOVE_SUS;
         if(strlen(move->endSquare) == (size_t)3 && game->chessboard[8 - src_row][src_col] != 'p' && game->chessboard[8 - src_row][src_col] != 'P')
             return MOVE_NOT_A_PAWN;
-        if(strlen(move->endSquare) == (size_t)3 && ((game->chessboard[8 - src_row][src_col] == 'p' && dest_row == 1) 
-            || (game->chessboard[8 - src_row][src_col] == 'P' && dest_row == 8)))
+        if(strlen(move->endSquare) == (size_t)3 && ((game->chessboard[8 - src_row][src_col] == 'p' && dest_row == 7) 
+            || (game->chessboard[8 - src_row][src_col] == 'P' && dest_row == 0)))
             return MOVE_MISSING_PROMOTION;
         if(!is_valid_move(game->chessboard[8 - src_row][src_col], 8 - src_row, src_col, 8 - dest_row, dest_col, game))
             return MOVE_WRONG;
