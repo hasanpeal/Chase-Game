@@ -337,7 +337,10 @@ int send_command(ChessGame *game, const char *message, int socketfd, bool is_cli
     if(strcmp(token, "/move") == 0){
         token = strtok(NULL, " ");
         ChessMove parsed_move;
-        printf("++++++++++++++%s %d", token, (int)strlen(token));
+        if((int)strlen(token) == 5 && !isalpha(token[4]))
+token[4] = 0;
+if((int)strlen(token) == 6)
+token[5] = 0;
         if(parse_move(token, &parsed_move) == 0){
             if(make_move(game, &parsed_move, is_client, true) == 0){
                 send(socketfd, message, strlen(message), 0);
