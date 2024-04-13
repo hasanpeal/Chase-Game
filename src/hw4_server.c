@@ -63,7 +63,7 @@ int main() {
         char str[200];
         fgets(str, 200, stdin);
         int result = send_command(&game, str, connfd, false);
-        while(result == COMMAND_ERROR){
+        while(result == COMMAND_ERROR || result == COMMAND_ERROR){
             INFO("You entered wrong command, please Enter a valid command");
             result = send_command(&game, str, connfd, false);
         }
