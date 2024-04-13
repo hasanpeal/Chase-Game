@@ -376,7 +376,11 @@ int send_command(ChessGame *game, const char *message, int socketfd, bool is_cli
         else
             return COMMAND_ERROR;
     }else if(strcmp(token, "/save") == 0){
-        if(save_game(game, "client's username", "game_database.txt") == 0){
+        char *userName;
+        //int save_number;
+        token = strtok(NULL, " ");
+        userName = token;
+        if(save_game(game, userName, "game_database.txt") == 0){
             send(socketfd, message, strlen(message), 0);
             return COMMAND_SAVE;
         }
@@ -429,17 +433,14 @@ int receive_command(ChessGame *game, const char *message, int socketfd, bool is_
 }
 
 int save_game(ChessGame *game, const char *username, const char *db_filename) {
-    char *un = strdup(username);
-    for(int i = 0; (size_t)i < strlen(un); i++)
-        if(un[i] == ' ')
+    for(int i = 0; (size_t)i < strlen(username); i++)
+        if(username[i] == ' ')
             return -1;
     FILE *fptr;
     fptr = fopen(db_filename, "a");
-    char fenStr[100];
+    char *fenStr = "";
     chessboard_to_fen(fenStr, game);
-    strcat(un, ":");
-    strcat(un, fenStr);
-    fprintf(fptr, "%s", un);
+    fprintf(fptr, "%s:%s\n", username, fenStr);
 
     // Close the file
     fclose(fptr);
