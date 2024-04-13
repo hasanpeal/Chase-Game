@@ -394,6 +394,7 @@ int receive_command(ChessGame *game, const char *message, int socketfd, bool is_
     char *str = strdup(message);
     char *token = strtok(str, " ");
     if(strcmp(token, "/move") == 0){
+        INFO("move *****");
         token = strtok(NULL, " ");
         ChessMove parsed_move;
         if(parse_move(token, &parsed_move) == 0){
@@ -406,6 +407,7 @@ int receive_command(ChessGame *game, const char *message, int socketfd, bool is_
         else
             return COMMAND_ERROR;
     }else if(strcmp(token, "/forfeit") == 0){
+        INFO("move forfeit");
         close(socketfd);
         return COMMAND_FORFEIT;
     }else if(strcmp(token, "/import") == 0){
