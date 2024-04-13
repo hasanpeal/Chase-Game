@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -40,12 +41,15 @@ display_chessboard(&game);
 while (1) {
 // Fill this in
 INFO("Enter a valid command");
-char str[20];
-fgets(str, 20, stdin);
+char str[200];
+fgets(str, 200, stdin);
+printf("::::::::::::%s\n", str);
 int result = send_command(&game, str, connfd, true);
+printf("..............................\n");
 while(result == COMMAND_ERROR || result == COMMAND_ERROR || result == COMMAND_SAVE){
 INFO("You entered wrong command, please Enter a valid command");
 result = send_command(&game, str, connfd, true);
+printf("================================\n");
 }
 if(result == COMMAND_FORFEIT){
 break;
