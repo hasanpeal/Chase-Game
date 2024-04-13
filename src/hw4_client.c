@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -45,11 +44,11 @@ char str[200];
 fgets(str, 200, stdin);
 printf("::::::::::::%s\n", str);
 int result = send_command(&game, str, connfd, true);
-printf("..............................\n");
+printf("..............................%d\n", result);
 while(result == COMMAND_ERROR || result == COMMAND_ERROR || result == COMMAND_SAVE){
 INFO("You entered wrong command, please Enter a valid command");
 result = send_command(&game, str, connfd, true);
-printf("================================\n");
+printf("================================%d\n", result);
 }
 if(result == COMMAND_FORFEIT){
 break;
