@@ -435,11 +435,11 @@ int save_game(ChessGame *game, const char *username, const char *db_filename) {
             return -1;
     FILE *fptr;
     fptr = fopen(db_filename, "a");
-    char fenStr[200];
+    char fenStr[100];
     chessboard_to_fen(fenStr, game);
     strcat(un, ":");
     strcat(un, fenStr);
-    fputs(un, fptr);
+    fprintf(fptr, "%s", un);
 
     // Close the file
     fclose(fptr);
