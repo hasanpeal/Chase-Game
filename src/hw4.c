@@ -439,7 +439,7 @@ int save_game(ChessGame *game, const char *username, const char *db_filename) {
     chessboard_to_fen(fenStr, game);
     strcat(un, ":");
     strcat(un, fenStr);
-    fprintf(fptr, "%s", un);
+    fprintf(fptr, "%s\n", un);
 
     // Close the file
     fclose(fptr);
