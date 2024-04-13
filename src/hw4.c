@@ -311,10 +311,18 @@ int make_move(ChessGame *game, ChessMove *move, bool is_client, bool validate_mo
         }
         game->capturedCount++;
     }
+    if((game->chessboard[8 - src_row][src_col] == 'p' && dest_row == 7) || (game->chessboard[8 - src_row][src_col] == 'P' && dest_row == 0)){
+        if(islower(game->chessboard[8 - src_row][src_col]) != 0)
+            game->chessboard[8 - dest_row][dest_col] = move->endSquare[2];
+        else
+            game->chessboard[8 - dest_row][dest_col] = toupper(move->endSquare[2]);
+    }
+    else
+        game->chessboard[8 - dest_row][dest_col] = game->chessboard[8 - src_row][src_col];
+    game->chessboard[8 - src_row][src_col] = '.';
     game->moves[game->moveCount] = *move;
     game->moveCount++;
-    game->chessboard[8 - dest_row][dest_col] = game->chessboard[8 - src_row][src_col];
-    game->chessboard[8 - src_row][src_col] = '.';
+    
     if(is_client)
         game->currentPlayer = BLACK_PLAYER;
     else
