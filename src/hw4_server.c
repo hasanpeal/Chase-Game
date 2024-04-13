@@ -56,8 +56,11 @@ int main() {
     while (1) {
         // Fill this in
         read(connfd, buffer, 1024 - 1);
-        if(receive_command(&game, buffer, connfd, false) == COMMAND_FORFEIT)
+        if(receive_command(&game, buffer, connfd, false) == COMMAND_FORFEIT){
+            close(connfd);
+            setsockopt(connfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
             break;
+        }
         INFO("Enter a valid command");
         char str[200];
         fgets(str, 200, stdin);

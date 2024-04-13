@@ -53,8 +53,11 @@ int main() {
             break;
         }
         read(connfd, buffer, 1024 - 1);
-        if(receive_command(&game, buffer, connfd, true) == COMMAND_FORFEIT)
+        if(receive_command(&game, buffer, connfd, true) == COMMAND_FORFEIT){
+            close(connfd);
+            setsockopt(connfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
             break;
+        }
     }
 
     // Please ensure that the following lines of code execute just before your program terminates.
