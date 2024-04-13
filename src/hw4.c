@@ -332,76 +332,14 @@ int make_move(ChessGame *game, ChessMove *move, bool is_client, bool validate_mo
 }
 
 int send_command(ChessGame *game, const char *message, int socketfd, bool is_client) {
-char *str = strdup(message);
-char *token = strtok(str, " ");
-if(strcmp(token, "/move") == 0){
-token = strtok(NULL, " ");
-ChessMove parsed_move;
-if((int)strlen(token) == 5 && !isalpha(token[4]))
-token[4] = 0;
-if((int)strlen(token) == 6)
-token[5] = 0;
-if(parse_move(token, &parsed_move) == 0){
-if(make_move(game, &parsed_move, is_client, true) == 0){
-send(socketfd, message, strlen(message), 0);
-return COMMAND_MOVE;
-}
-else
-return COMMAND_ERROR;
-}
-else
-return COMMAND_ERROR;
-}else if(strcmp(token, "/forfeit") == 0){
-send(socketfd, message, strlen(message), 0);
-return COMMAND_FORFEIT;
-}else if(strcmp(token, "/chessboard") == 0){
-display_chessboard(game);
-return COMMAND_DISPLAY;
-}else if(strcmp(token, "/import") == 0){
-if(!is_client){
-token = strtok(NULL, " ");
-fen_to_chessboard(token, game);
-send(socketfd, message, strlen(message), 0);
-return COMMAND_IMPORT;
-}
-else
-return COMMAND_ERROR;
-}else if(strcmp(token, "/load") == 0){
-char *userName;
-int save_number;
-token = strtok(NULL, " ");
-userName = token;
-token = strtok(NULL, " ");
-save_number = atoi(token);
-if(load_game(game, userName, "game_database.txt", save_number) == 0){
-send(socketfd, message, strlen(message), 0);
-return COMMAND_LOAD;
-}
-else
-return COMMAND_ERROR;
-}else if(strcmp(token, "/save") == 0){
-char *userName;
-//int save_number;
-token = strtok(NULL, " ");
-userName = token;
-if(save_game(game, userName, "game_database.txt") == 0){
-send(socketfd, message, strlen(message), 0);
-return COMMAND_SAVE;
-}
-else
-return COMMAND_ERROR;
-}
-return COMMAND_UNKNOWN;
-}
-int receive_command(ChessGame *game, const char *message, int socketfd, bool is_client) {
     char *str = strdup(message);
     char *token = strtok(str, " ");
     if(strcmp(token, "/move") == 0){
         token = strtok(NULL, " ");
         ChessMove parsed_move;
         if(parse_move(token, &parsed_move) == 0){
-            if(make_move(game, &parsed_move, is_client, false) == 0){
-                free(str);
+            if(make_move(game, &parsed_move, is_client, true) == 0){
+                send(socketfd, message, strlen(message), 0);
                 return COMMAND_MOVE;
             }
             else
@@ -410,14 +348,16 @@ int receive_command(ChessGame *game, const char *message, int socketfd, bool is_
         else
             return COMMAND_ERROR;
     }else if(strcmp(token, "/forfeit") == 0){
-        close(socketfd);
-        free(str);
+        send(socketfd, message, strlen(message), 0);
         return COMMAND_FORFEIT;
+    }else if(strcmp(token, "/chessboard") == 0){
+        display_chessboard(game);
+        return COMMAND_DISPLAY;
     }else if(strcmp(token, "/import") == 0){
-        if(is_client){
+        if(!is_client){
             token = strtok(NULL, " ");
             fen_to_chessboard(token, game);
-            free(str);
+            send(socketfd, message, strlen(message), 0);
             return COMMAND_IMPORT;
         }
         else
@@ -430,13 +370,65 @@ int receive_command(ChessGame *game, const char *message, int socketfd, bool is_
         token = strtok(NULL, " ");
         save_number = atoi(token);
         if(load_game(game, userName, "game_database.txt", save_number) == 0){
-            free(str);
+            send(socketfd, message, strlen(message), 0);
+            return COMMAND_LOAD;
+        }
+        else
+            return COMMAND_ERROR;
+    }else if(strcmp(token, "/save") == 0){
+        char *userName;
+        //int save_number;
+        token = strtok(NULL, " ");
+        userName = token;
+        if(save_game(game, userName, "game_database.txt") == 0){
+            send(socketfd, message, strlen(message), 0);
+            return COMMAND_SAVE;
+        }
+        else
+            return COMMAND_ERROR;
+    }
+    return COMMAND_UNKNOWN;
+}
+
+int receive_command(ChessGame *game, const char *message, int socketfd, bool is_client) {
+    char *str = strdup(message);
+    char *token = strtok(str, " ");
+    if(strcmp(token, "/move") == 0){
+        token = strtok(NULL, " ");
+        ChessMove parsed_move;
+        if(parse_move(token, &parsed_move) == 0){
+            if(make_move(game, &parsed_move, is_client, false) == 0){
+                return COMMAND_MOVE;
+            }
+            else
+                return COMMAND_ERROR;
+        }
+        else
+            return COMMAND_ERROR;
+    }else if(strcmp(token, "/forfeit") == 0){
+        close(socketfd);
+        return COMMAND_FORFEIT;
+    }else if(strcmp(token, "/import") == 0){
+        if(!is_client){
+            token = strtok(NULL, " ");
+            fen_to_chessboard(token, game);
+            return COMMAND_IMPORT;
+        }
+        else
+            return COMMAND_ERROR;
+    }else if(strcmp(token, "/load") == 0){
+        char *userName;
+        int save_number;
+        token = strtok(NULL, " ");
+        userName = token;
+        token = strtok(NULL, " ");
+        save_number = atoi(token);
+        if(load_game(game, userName, "game_database.txt", save_number) == 0){
             return COMMAND_LOAD;
         }
         else
             return COMMAND_ERROR;
     }
-    free(str);
     return -1;
 }
 
