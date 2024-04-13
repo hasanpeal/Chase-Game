@@ -465,13 +465,13 @@ int load_game(ChessGame *game, const char *username, const char *db_filename, in
     bool found = false;
     while ((read = getline(&line, &len, fp)) != -1) {
         char *token = strtok(line, ":");
-        if(username == token && save_number == 1){
+        if(strcmp(username, token) == 0 && save_number == 1){
             token = strtok(NULL, ":");
             fen_to_chessboard(token, game);
             found = true;
             break;
         }
-        else if(username == token)
+        else if(strcmp(username, token) == 0)
             save_number--;
     }
 
