@@ -439,7 +439,7 @@ int save_game(ChessGame *game, const char *username, const char *db_filename) {
     chessboard_to_fen(fenStr, game);
     strcat(un, ":");
     strcat(un, fenStr);
-    fprintf(fptr, "%s\n", un);
+    fprintf(fptr, "%s\r\n", un);
 
     // Close the file
     fclose(fptr);
@@ -493,3 +493,4 @@ void display_chessboard(ChessGame *game) {
     }
     printf("  a b c d e f g h\n");
 }
+
