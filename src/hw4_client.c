@@ -14,6 +14,7 @@ int main() {
     int connfd = 0;
     struct sockaddr_in serv_addr;
     char buffer[BUFFER_SIZE] = { 0 };
+    int opt = 1;
 
     // Connect to the server
     if ((connfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -48,7 +49,8 @@ int main() {
         }
         if(result == COMMAND_FORFEIT){
             close(connfd);
-            exit(1); 
+            setsockopt(connfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+            break;
         }
         read(connfd, buffer, 1024 - 1);
         if(receive_command(&game, buffer, connfd, true) == COMMAND_FORFEIT)

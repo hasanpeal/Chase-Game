@@ -68,8 +68,8 @@ int main() {
         }
         if(result == COMMAND_FORFEIT){
             close(connfd);
-            close(listenfd);
-            exit(1);
+            setsockopt(connfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+            break;
         }
     }
 
