@@ -391,7 +391,7 @@ int send_command(ChessGame *game, const char *message, int socketfd, bool is_cli
 }
 
 int receive_command(ChessGame *game, const char *message, int socketfd, bool is_client) {
-    //INFO(message);
+    printf("%s\n", message);
     char *str = strdup(message);
     char *token = strtok(str, " ");
     if(strcmp(token, "/move") == 0){
