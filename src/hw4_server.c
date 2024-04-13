@@ -57,8 +57,6 @@ int main() {
         // Fill this in
         read(connfd, buffer, 1024 - 1);
         if(receive_command(&game, buffer, connfd, false) == COMMAND_FORFEIT){
-            close(connfd);
-            setsockopt(connfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
             break;
         }
         INFO("Enter a valid command");
@@ -70,12 +68,12 @@ int main() {
             result = send_command(&game, str, connfd, false);
         }
         if(result == COMMAND_FORFEIT){
-            close(connfd);
-            setsockopt(connfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
             break;
         }
     }
-
+    setsockopt(connfd, SOL_SOCKET, SO_REUSEPORT, &opt, sizeof(opt));
+    setsockopt(connfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+    close(connfd);
     close(listenfd);
     return 0;
 }

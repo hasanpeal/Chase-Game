@@ -48,14 +48,10 @@ int main() {
             result = send_command(&game, str, connfd, true);
         }
         if(result == COMMAND_FORFEIT){
-            close(connfd);
-            setsockopt(connfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
             break;
         }
         read(connfd, buffer, 1024 - 1);
         if(receive_command(&game, buffer, connfd, true) == COMMAND_FORFEIT){
-            close(connfd);
-            setsockopt(connfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
             break;
         }
     }
@@ -67,6 +63,8 @@ int main() {
     chessboard_to_fen(fen, &game);
     fprintf(temp, "%s", fen);
     fclose(temp);
+    setsockopt(connfd, SOL_SOCKET, SO_REUSEPORT, &opt, sizeof(opt));
+    setsockopt(connfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
     close(connfd);
     return 0;
 }
