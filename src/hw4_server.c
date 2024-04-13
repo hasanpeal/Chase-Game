@@ -1,5 +1,7 @@
 #include "hw4.h"
 
+
+
 int main() {
     int listenfd, connfd;
     struct sockaddr_in address;
@@ -64,8 +66,10 @@ int main() {
             INFO("You entered wrong command, please Enter a valid command");
             result = send_command(&game, str, connfd, false);
         }
-        if(result == COMMAND_FORFEIT)
+        if(result == COMMAND_FORFEIT){
+            close(connfd);
             break;
+        }
     }
 
     close(listenfd);
