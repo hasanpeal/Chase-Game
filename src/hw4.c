@@ -391,7 +391,6 @@ int send_command(ChessGame *game, const char *message, int socketfd, bool is_cli
 }
 
 int receive_command(ChessGame *game, const char *message, int socketfd, bool is_client) {
-    printf("%s\n", message);
     char *str = strdup(message);
     char *token = strtok(str, " ");
     if(strcmp(token, "/move") == 0){
@@ -411,8 +410,8 @@ int receive_command(ChessGame *game, const char *message, int socketfd, bool is_
         return COMMAND_FORFEIT;
     }else if(strcmp(token, "/import") == 0){
         if(is_client){
-            token = strtok(NULL, " ");
-            fen_to_chessboard(token, game);
+            //token = strtok(NULL, " ");
+            //fen_to_chessboard(token, game);
             return COMMAND_IMPORT;
         }
         else
