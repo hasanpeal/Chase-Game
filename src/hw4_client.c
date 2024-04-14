@@ -33,40 +33,43 @@ int main() {
     }
 
     initialize_game(&game);
-    display_chessboard(&game);
-    char buffer[BUFFER_SIZE];
-    while (1) {
-        bool validCommand;
+display_chessboard(&game);
+
+char buffer[BUFFER_SIZE];
+while (1) {
+    bool validCommand = false;
     do {
         printf("Client command: ");
-        fgets(buffer, BUFFER_SIZE, stdin);
-        buffer[strcspn(buffer, "\n")] = 0; // Remove newline character from fgets input
+        if (fgets(buffer, BUFFER_SIZE, stdin) == NULL) break; // Handle EOF or error
+        buffer[strcspn(buffer, "\n")] = 0; // Ensure command string is properly terminated
 
         int commandResult = send_command(&game, buffer, connfd, true);
-        validCommand = (commandResult != COMMAND_ERROR && commandResult != COMMAND_UNKNOWN && commandResult != COMMAND_SAVE);
         if (commandResult == COMMAND_FORFEIT) {
             close(connfd);
             break;
         }
-    } while (!validCommand);
+        validCommand = (commandResult != COMMAND_ERROR && commandResult != COMMAND_UNKNOWN && commandResult != COMMAND_SAVE);
+    } while (!validCommand && !feof(stdin));
+
+    if (!validCommand) break; // Exit if last command was invalid
 
     int bytes_read = read(connfd, buffer, BUFFER_SIZE - 1);
-    if (bytes_read <= 0) break;  // Handle disconnection or error
+    if (bytes_read <= 0) break; // Handle disconnection
     buffer[bytes_read] = '\0';
 
     if (receive_command(&game, buffer, connfd, true) == COMMAND_FORFEIT) {
         close(connfd);
         break;
     }
-    }
+}
 
-    // Please ensure that the following lines of code execute just before your program terminates.
-    // If necessary, copy and paste it to other parts of your code where you terminate your program.
-    FILE *temp = fopen("./fen.txt", "w");
+FILE *temp = fopen("./fen.txt", "w");
+if (temp != NULL) {
     char fen[200];
     chessboard_to_fen(fen, &game);
     fprintf(temp, "%s", fen);
     fclose(temp);
-    close(connfd);
-    return 0;
+}
+close(connfd);
+return 0;
 }

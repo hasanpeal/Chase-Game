@@ -47,13 +47,13 @@ int main() {
     INFO("Server accepted connection");
     // Server accepted connection
     ChessGame game;
-    initialize_game(&game);
-    display_chessboard(&game);
+initialize_game(&game);
+display_chessboard(&game);
 
 char buffer[BUFFER_SIZE];
-    while (1) {
-        int bytes_read = read(connfd, buffer, BUFFER_SIZE - 1);
-    if (bytes_read <= 0) break;  // Handle disconnection
+while (1) {
+    int bytes_read = read(connfd, buffer, BUFFER_SIZE - 1);
+    if (bytes_read <= 0) break;  // Handle client disconnection
     buffer[bytes_read] = '\0';
 
     int result = receive_command(&game, buffer, connfd, false);
@@ -65,18 +65,17 @@ char buffer[BUFFER_SIZE];
     bool validCommand;
     do {
         printf("Server command: ");
-        fgets(buffer, BUFFER_SIZE, stdin);
-        buffer[strcspn(buffer, "\n")] = 0; // Remove newline character from fgets input
+        if (fgets(buffer, BUFFER_SIZE, stdin) == NULL) break;
+        buffer[strcspn(buffer, "\n")] = 0;
 
         result = send_command(&game, buffer, connfd, false);
         validCommand = (result != COMMAND_ERROR && result != COMMAND_UNKNOWN);
-        if (result == COMMAND_FORFEIT) {
-            close(connfd);
-            break;
-        }
-    } while (!validCommand);
-    }
+    } while (!validCommand && !feof(stdin));
 
-    close(listenfd);
-    return 0;
+    if (!validCommand) break;
+}
+
+close(listenfd);
+close(connfd);
+return 0;
 }
