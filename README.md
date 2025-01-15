@@ -1,5 +1,5 @@
 
-# Networked Chess Application (CSE 220: Systems Fundamentals I)
+# Networked Chess Application
 
 ## Overview
 This repository contains the implementation of a **Networked Chess Application** developed in C. It was built as part of a homework assignment for the **CSE 220: Systems Fundamentals I** course at Stony Brook University. The project combines concepts of **systems programming** with real-world applications, enabling two players to engage in a simplified chess game over a network.
